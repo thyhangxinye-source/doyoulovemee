@@ -10,89 +10,96 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family:Segoe UI,sans-serif;
 }
 
 body{
     height:100vh;
-    background:linear-gradient(135deg,#ffd1dc,#ffe6eb);
+    overflow:hidden;
+    background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
     display:flex;
     justify-content:center;
     align-items:center;
-    overflow:hidden;
-}
-
-.container{
-    text-align:center;
-    z-index:10;
-}
-
-.envelope{
-    width:220px;
-    height:140px;
-    background:#ff7b9c;
-    margin:auto;
-    border-radius:10px;
-    cursor:pointer;
     position:relative;
-    box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
-.envelope::before{
-    content:"💌";
-    font-size:70px;
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-}
-
-.letter{
-    display:none;
+.card{
     background:white;
-    padding:30px;
+    padding:40px;
+    border-radius:25px;
+    text-align:center;
     width:90%;
     max-width:600px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
+    z-index:10;
 }
 
 h1{
     color:#ff4f81;
-    margin-bottom:20px;
-}
-
-p{
-    line-height:1.8;
-    color:#444;
     margin-bottom:15px;
 }
 
+p{
+    color:#666;
+    margin-bottom:25px;
+    line-height:1.6;
+}
+
 button{
-    margin-top:20px;
-    padding:12px 30px;
     border:none;
-    border-radius:30px;
-    background:#ff4f81;
-    color:white;
+    border-radius:50px;
+    padding:14px 28px;
     font-size:18px;
     cursor:pointer;
+    margin:10px;
+    transition:0.3s;
+}
+
+#yes{
+    background:#ff4f81;
+    color:white;
+}
+
+#yes:hover{
+    transform:scale(1.1);
+}
+
+#no{
+    background:#eee;
 }
 
 .heart{
     position:absolute;
     color:#ff4f81;
-    animation:fly 5s linear infinite;
+    pointer-events:none;
+    animation:floatUp linear forwards;
 }
 
-@keyframes fly{
+@keyframes floatUp{
     from{
         transform:translateY(100vh);
         opacity:1;
     }
     to{
-        transform:translateY(-100px);
+        transform:translateY(-120px);
         opacity:0;
+    }
+}
+
+.bigHeart{
+    position:absolute;
+    font-size:60px;
+    animation:explode 1.5s forwards;
+}
+
+@keyframes explode{
+    from{
+        opacity:1;
+        transform:scale(0.2);
+    }
+    to{
+        opacity:0;
+        transform:scale(2.5);
     }
 }
 </style>
@@ -100,74 +107,105 @@ button{
 
 <body>
 
-<div class="container">
+<div class="card" id="card">
+    <h1>🌷 Tớ có điều muốn hỏi cậu 🌷</h1>
 
-    <div class="envelope" onclick="openLetter()"></div>
+    <p>
+        Tớ đã suy nghĩ rất lâu rồi...
+        Và hôm nay quyết định lấy hết can đảm để nói ra.
+    </p>
 
-    <div class="letter" id="letter">
-        <h1>Gửi cậu ❤️</h1>
+    <h2 style="color:#ff4f81;">
+        Cậu làm người yêu tớ nhé? ❤️
+    </h2>
 
-        <p>
-            Có lẽ đây là điều tớ đã muốn nói từ rất lâu rồi.
-        </p>
+    <br>
 
-        <p>
-            Tớ không biết chính xác từ khi nào, chỉ biết rằng mỗi lần nói chuyện với cậu,
-            ngày của tớ đều vui hơn một chút.
-        </p>
-
-        <p>
-            Tớ thích cách cậu cười, thích những câu chuyện rất bình thường của cậu,
-            và thích cảm giác được nhìn thấy tên cậu xuất hiện trên màn hình điện thoại.
-        </p>
-
-        <p>
-            Hôm nay tớ lấy hết can đảm để nói rằng...
-        </p>
-
-        <h1>Tớ thích cậu rất nhiều 🌷</h1>
-
-        <button onclick="acceptLove()">
-            Đọc xong rồi ❤️
-        </button>
-    </div>
-
+    <button id="yes">Đồng ý 💕</button>
+    <button id="no">Không 😝</button>
 </div>
 
 <script>
 
-function openLetter(){
-    document.querySelector(".envelope").style.display="none";
-    document.getElementById("letter").style.display="block";
-}
+const noBtn = document.getElementById("no");
 
-function acceptLove(){
-    document.body.innerHTML=`
-    <div style="text-align:center;">
-        <h1 style="font-size:60px;color:#ff4f81;">
-            Cảm ơn cậu đã đọc đến đây ❤️
-        </h1>
-        <p style="font-size:24px;margin-top:20px;">
-            Dù câu trả lời của cậu là gì, tớ vẫn rất vui vì đã đủ can đảm để nói ra điều này.
+const messages = [
+    "Ơ kìa 😳",
+    "Suy nghĩ lại đi 🥺",
+    "Bấm nhầm đúng không? 😆",
+    "Tớ không tin đâu 😭",
+    "Nút này bị lỗi rồi 🤭",
+    "Không được từ chối đâu 😝",
+    "Cho tớ cơ hội nha ❤️"
+];
+
+noBtn.addEventListener("mouseover", () => {
+
+    const maxX = window.innerWidth - 120;
+    const maxY = window.innerHeight - 70;
+
+    noBtn.style.position = "absolute";
+    noBtn.style.left = Math.random()*maxX + "px";
+    noBtn.style.top = Math.random()*maxY + "px";
+
+    noBtn.innerText =
+        messages[Math.floor(Math.random()*messages.length)];
+});
+
+document.getElementById("yes").onclick = () => {
+
+    document.getElementById("card").innerHTML = `
+        <h1>🥰 Yayyyyy 🥰</h1>
+        <p style="font-size:22px">
+            Từ hôm nay, tớ xin được chính thức thích cậu
+            một cách công khai rồi nha ❤️
         </p>
-    </div>
+        <h2 style="color:#ff4f81">
+            Cảm ơn vì đã đồng ý 🌷
+        </h2>
     `;
-}
+
+    for(let i=0;i<80;i++){
+
+        const heart=document.createElement("div");
+
+        heart.className="bigHeart";
+        heart.innerHTML="❤️";
+
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.top=Math.random()*100+"vh";
+
+        document.body.appendChild(heart);
+
+        setTimeout(()=>{
+            heart.remove();
+        },1500);
+    }
+};
 
 function createHeart(){
+
     const heart=document.createElement("div");
+
     heart.className="heart";
     heart.innerHTML="❤️";
+
     heart.style.left=Math.random()*100+"vw";
-    heart.style.fontSize=(Math.random()*20+15)+"px";
+    heart.style.fontSize=(15+Math.random()*30)+"px";
+
+    const duration=4+Math.random()*4;
+
+    heart.style.animationDuration=
+        duration+"s";
+
     document.body.appendChild(heart);
 
     setTimeout(()=>{
         heart.remove();
-    },5000);
+    },duration*1000);
 }
 
-setInterval(createHeart,300);
+setInterval(createHeart,150);
 
 </script>
 
