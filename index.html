@@ -1,61 +1,66 @@
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Lấy các phần tử HTML sau khi trang đã tải xong
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
 
-const noBtn = document.getElementById("no");
+    const messages = [
+        "Ơ kìa 😝",
+        "Suy nghĩ lại đi 🥺",
+        "Tớ biết cậu muốn bấm Đồng ý mà 😆",
+        "Nút này hỏng rồi 🤭",
+        "Không được từ chối đâu ❤️",
+        "Cho tớ một cơ hội nha 🌷"
+    ];
 
-const messages = [
-    "Ơ kìa 😝",
-    "Suy nghĩ lại đi 🥺",
-    "Tớ biết cậu muốn bấm Đồng ý mà 😆",
-    "Nút này hỏng rồi 🤭",
-    "Không được từ chối đâu ❤️",
-    "Cho tớ một cơ hội nha 🌷"
-];
+    // 2. Hàm xử lý di chuyển nút "Không"
+    function moveButton() {
+        const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+        const maxY = window.innerHeight - noBtn.offsetHeight - 20;
 
-function moveButton() {
+        noBtn.style.position = "fixed";
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
 
-    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+        noBtn.innerText = messages[Math.floor(Math.random() * messages.length)];
+    }
 
-    noBtn.style.position = "fixed";
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+    // 3. Gắn sự kiện cho nút "Không"
+    if (noBtn) {
+        noBtn.addEventListener("mouseover", moveButton);
+        noBtn.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+        noBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+    }
 
-    noBtn.innerText =
-      messages[Math.floor(Math.random() * messages.length)];
-}
-
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("touchstart", function(e){
-    e.preventDefault();
-    moveButton();
+    // 4. Gắn sự kiện cho nút "Có"
+    if (yesBtn) {
+        yesBtn.addEventListener("click", () => {
+            document.body.innerHTML = `
+                <div style="
+                    height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+                    font-family: sans-serif;
+                ">
+                    <h1 style="font-size: 50px; color: #ff4f81; margin: 0;">
+                        🥰 Yeahhhh, yêu cậu nhiều 🥰
+                    </h1>
+                    <h2 style="margin-top: 20px; color: #ff4f81; font-weight: normal;">
+                        Từ giờ cậu là người yêu tớ rồi ❤️
+                    </h2>
+                </div>
+            `;
+        });
+    }
 });
-
-noBtn.addEventListener("click", function(e){
-    e.preventDefault();
-    moveButton();
-});
-
-document.getElementById("yes").addEventListener("click", () => {
-
-    document.body.innerHTML = `
-        <div style="
-            height:100vh;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            text-align:center;
-            background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
-        ">
-            <h1 style="font-size:50px;color:#ff4f81">
-                🥰 Yeahhhh, yêu cậu nhiều 🥰
-            </h1>
-
-            <h2 style="margin-top:20px;color:#ff4f81">
-                Từ giờ cậu là người yêu tớ rồi ❤️
-            </h2>
-        </div>
-    `;
-});
-
 </script>
